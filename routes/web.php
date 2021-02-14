@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Auth;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::post('login', [Auth\UserController::class, 'login']);
+
+Route::post('logout', [Auth\UserController::class, 'logout']);
+
+Route::view('{uri?}/{uri2?}', 'spa');
