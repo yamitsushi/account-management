@@ -30,13 +30,13 @@ export default [
 		path: '/',
 		name: 'dashboard',
 		component: Dashboard,
-		meta: { middleware: [auth, ready]}
+		meta: { middleware: [auth, ready] }
 	},
 	{
 		path: 'setting',
 		name: 'setting',
 		component: Setting,
-		meta: { middleware: [auth, ready]}
+		meta: { middleware: [auth, ready] }
 	},
 	{
 		path: '/loading',

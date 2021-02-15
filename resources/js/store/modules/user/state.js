@@ -1,4 +1,5 @@
 export default {
 	username : null,
-	ready: false
+	ready: false,
+	permissions: []
 }
