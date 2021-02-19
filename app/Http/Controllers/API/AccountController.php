@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\API\Account\PostUserRequest;
 use App\Http\Requests\API\Account\PatchUserRequest;
+use App\Http\Requests\API\Account\PostRoleRequest;
+use App\Http\Requests\API\Account\PatchRoleRequest;
+use App\Http\Requests\API\Account\DeleteRoleRequest;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Permission;
@@ -27,7 +30,7 @@ class AccountController extends Controller
     	return response()->json(Permission::allPermissions()->select('action')->get());
     }
 
-    public function postRole(Request $request)
+    public function postRole(PostRoleRequest $request)
     {
         $role = Role::firstOrCreate(['name' => $request->name]);
         $permissions = [];
@@ -45,7 +48,7 @@ class AccountController extends Controller
         return response()->json(Role::with('permissions')->find($role->id));
     }
 
-    public function patchRole(Request $request, Role $role)
+    public function patchRole(PatchRoleRequest $request, Role $role)
     {
         $role = Role::firstOrCreate(['name' => $request->name]);
         $permissions = [];
@@ -59,7 +62,7 @@ class AccountController extends Controller
         return response()->json(Role::with('permissions')->find($role->id));
     }
 
-    public function deleteRole(Request $request, Role $role)
+    public function deleteRole(DeleteRoleRequest $request, Role $role)
     {
         return response()->json($role->delete());
     }
