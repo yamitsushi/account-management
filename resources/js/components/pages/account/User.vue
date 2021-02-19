@@ -100,6 +100,12 @@
 						</b-col>
 					</b-row>
 				</div>
+				<div class="form-group">
+					<input type="password" class="form-control" v-model="updateForm['password']" placeholder="New Password">
+				</div>
+				<div class="form-group">
+					<input type="password" class="form-control" v-model="updateForm['password_confirmation']" placeholder="Confirm Password">
+				</div>
 			</template>
 
 			<template #modal-footer="{ cancel }">
@@ -203,6 +209,8 @@
 				this.updateForm['username'] = row.username
 				this.updateForm['deactivate'] = row['deleted_at'] ? true : false
 				this.updateForm['roles'] = []
+				this.updateForm['password'] = []
+				this.updateForm['password_confirmation'] = []
 				row.roles.forEach((value, index) => {
 					this.updateForm['roles'].push(value.name)
 				})

@@ -80,7 +80,10 @@ class AccountController extends Controller
 
     public function patchUser(Request $request, User $user)
     {
-        $user = User::firstOrCreate($request->only(['username']));
+        if ($request->password)
+            $user->update($request->only(['username', 'password']));
+        else
+            $user->update($request->only(['username']));
         $roles = [];
         foreach ($request->roles as $role) {
             array_push(
