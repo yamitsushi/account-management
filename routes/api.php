@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
 		Route::prefix('user')->group(function () {
 			Route::get('/', [API\AccountController::class, 'getUser']);
 			Route::post('/', [API\AccountController::class, 'postUser']);
-			Route::patch('{user}', [API\AccountController::class, 'patchUser']);
+			Route::patch('{id}', [API\AccountController::class, 'patchUser']);
 		});
 		Route::prefix('role')->group(function () {
 			Route::get('/', [API\AccountController::class, 'getRole']);

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\API\Account\PostUserRequest;
+use App\Http\Requests\API\Account\PatchUserRequest;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Permission;
@@ -62,7 +64,7 @@ class AccountController extends Controller
         return response()->json($role->delete());
     }
 
-    public function postUser(Request $request)
+    public function postUser(PostUserRequest $request)
     {
         $user = User::firstOrCreate($request->only(['username', 'password']));
         $roles = [];
@@ -78,22 +80,31 @@ class AccountController extends Controller
         return response()->json(User::with('roles:name')->find($user->id));
     }
 
-    public function patchUser(Request $request, User $user)
+    public function patchUser(PatchUserRequest $request, $id)
     {
-        if ($request->password)
-            $user->update($request->only(['username', 'password']));
-        else
+        $user = User::withTrashed()->find($id);
+        if ($request->deactivate)
+        {
             $user->update($request->only(['username']));
-        $roles = [];
-        foreach ($request->roles as $role) {
-            array_push(
-                $roles,
-                Role::where('name',
-                    $role
-                )->first()->id
-            );
+            $user->delete();
+        } else
+        {
+            $user->restore();
+            if ($request->password)
+                $user->update($request->only(['username', 'password']));
+            else
+                $user->update($request->only(['username']));
+            $roles = [];
+            foreach ($request->roles as $role) {
+                array_push(
+                    $roles,
+                    Role::where('name',
+                        $role
+                    )->first()->id
+                );
+            }
+            $user->roles()->sync($roles);
         }
-        $user->roles()->sync($roles);
-        return response()->json(User::with('roles:name')->find($user->id));
+        return response()->json(User::with('roles:name')->withTrashed()->find($id));
     }
 }

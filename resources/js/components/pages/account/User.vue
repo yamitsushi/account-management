@@ -88,7 +88,11 @@
 					<label>Username</label>
 					<input type="string" class="form-control form-control-user" v-model="updateForm['username']" placeholder="Username">
 				</div>
-				<div class="form-group">
+				<div class="form-check">
+					<input type="checkbox" class="form-check-input" v-model="updateForm['deactivate']">
+					<label>Deactivate</label>
+				</div>
+				<div class="form-group" v-if="!updateForm['deactivate']">
 					<label>Assigned Role</label>
 					<b-form-input list="update-role-list" v-model="updateForm['temp-role']" v-on:keyup.enter="updateRoleForm"></b-form-input>
 					<datalist id="update-role-list">
@@ -100,10 +104,10 @@
 						</b-col>
 					</b-row>
 				</div>
-				<div class="form-group">
+				<div class="form-group" v-if="!updateForm['deactivate']">
 					<input type="password" class="form-control" v-model="updateForm['password']" placeholder="New Password">
 				</div>
-				<div class="form-group">
+				<div class="form-group" v-if="!updateForm['deactivate']">
 					<input type="password" class="form-control" v-model="updateForm['password_confirmation']" placeholder="Confirm Password">
 				</div>
 			</template>
@@ -174,7 +178,8 @@
 				},
 				updateForm: {
 					username: null,
-					roles: []
+					roles: [],
+					deactivate: false
 				},
 			};
 		},
