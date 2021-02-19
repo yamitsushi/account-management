@@ -4,6 +4,9 @@ export default {
 	setUsername (state, payload) {
 		state.username = payload ?? null
 	},
+	setPermissions (state, payload) {
+		state.permissions = payload
+	},
 	setReady (state, payload) {
 		state.ready = payload
 	},

@@ -17,8 +17,15 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('username')->unique();
             $table->string('password');
+            $table->softDeletes();
             $table->timestamps();
         });
+
+        // Default administrator
+        DB::table('users')->insert([
+            'username' => 'admin',
+            'password' =>  bcrypt('admin')
+        ]);
     }
 
     /**

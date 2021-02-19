@@ -5,7 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Auth\User\LoginRequest;
+use App\Http\Requests\Auth\User\ChangePasswordRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use App\Models\Role;
+use App\Models\Permission;
 
 class UserController extends Controller
 {
@@ -35,5 +40,17 @@ class UserController extends Controller
 	public function check()
 	{
 		return Auth::user()->username;
+	}
+
+	public function permissions()
+	{
+		return response()->json([
+			'permissions' => Auth::user()->with('roles.permissions')->first()->roles->pluck('permissions')->flatten()->unique('action')->flatten()->pluck('action')
+		]);
+	}
+
+	public function changePassword(ChangePasswordRequest $request)
+	{
+        return Auth::user()->update(['password' => bcrypt($request->password)]);
 	}
 }

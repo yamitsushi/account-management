@@ -34,7 +34,7 @@
 								<label>Confirm Password:</label>
 							</b-col>
 							<b-col sm="9">
-								<b-form-input v-model="passData['confirm_password']" type="password" placeholder="Confirm Password"/>
+								<b-form-input v-model="passData['password_confirmation']" type="password" placeholder="Confirm Password"/>
 							</b-col>
 						</b-row>
 						<a v-on:click="changePassword()" class="btn btn-primary btn-user btn-block btn-maroon">
@@ -53,7 +53,7 @@
 				"passData" : {
 					"old_password": null,
 					"password": null,
-					"confirm_password": null
+					"password_confirmation": null
 				},
 				"passSuccess" : false 
 			}

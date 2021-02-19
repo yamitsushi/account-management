@@ -13,6 +13,8 @@ import Setting from "@/components/pages/Setting"
 import Loading from "@/components/pages/Loading"
 import Dashboard from "@/components/pages/Dashboard"
 
+import Account from "./route/account"
+
 const Empty = { template: '<router-view/>' }
 
 export default [
@@ -44,6 +46,7 @@ export default [
 		meta: { middleware: [auth, preload] },
 		name: 'preload'
 	},
+	Account,
 	{
 		path: '*',
 		component: Missing,

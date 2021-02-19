@@ -13,6 +13,32 @@
                 <span>Dashboard</span>
             </router-link>
         </li>
+        <div class="sidebar-heading">
+            Interface
+        </div>
+        <li class="nav-item" v-bind:class="isActive('account')">
+            <a class="nav-link" v-b-toggle href="#collapseTwo" @click.prevent>
+                <i class="fas fa-hotel"></i>
+                <span>Account</span>
+            </a>
+            <b-collapse id="collapseTwo">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Account Controller:</h6>
+                    <router-link class="collapse-item" :to="{ name : 'account.dashboard'}" exact-path>
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </router-link>
+                    <router-link class="collapse-item" :to="{ name : 'account.user'}" exact-path>
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>User Controller</span>
+                    </router-link>
+                    <router-link class="collapse-item" :to="{ name : 'account.role'}" exact-path>
+                        <i class="fas fa-fw fa-user-tag"></i>
+                        <span>Role Controller</span>
+                    </router-link>
+                </div>
+            </b-collapse>
+        </li>
         <hr class="sidebar-divider d-none d-md-block">
         <div class="text-center d-none d-md-inline">
             <button class="rounded-circle border-0" id="sidebarToggle" v-on:click="toggleSidebar"></button>
@@ -32,7 +58,7 @@
                 return this.isHidden ? "toggled" : ""
             },
             isActive(name) {
-                return this.$route.name == name ? "active" : ""
+                return this.$route.name.split('.')[0].includes(name) ? "active" : ""
             }
         }
     }

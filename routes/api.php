@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth;
+use App\Http\Controllers\API;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,9 +18,26 @@ use App\Http\Controllers\Auth;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+	return $request->user();
 });
 
 Route::middleware('auth:sanctum')->group(function () {
 	Route::get('check', [Auth\UserController::class, 'check']);
+	Route::get('preload', [Auth\UserController::class, 'permissions']);
+	Route::post('change-password', [Auth\UserController::class, 'changePassword']);
+
+	Route::prefix('account')->group(function () {
+		Route::prefix('user')->group(function () {
+			Route::get('/', [API\AccountController::class, 'getUser']);
+			Route::post('/', [API\AccountController::class, 'postUser']);
+			Route::patch('{role}', [API\AccountController::class, 'patchUser']);
+		});
+		Route::prefix('role')->group(function () {
+			Route::get('/', [API\AccountController::class, 'getRole']);
+			Route::post('/', [API\AccountController::class, 'postRole']);
+			Route::patch('{role}', [API\AccountController::class, 'patchRole']);
+			Route::delete('{role}', [API\AccountController::class, 'deleteRole']);
+		});
+		Route::get('permission', [API\AccountController::class, 'getPermission']);
+	});
 });

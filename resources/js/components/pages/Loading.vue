@@ -19,15 +19,20 @@
 <script>
     import { mapActions } from 'vuex'
     import router from '@/router/index'
+    
     export default {
         methods: {
             ...mapActions('user', [
-                'preload'
+                'loadPermission'
                 ])
         },
         mounted() {
-            this.preload(true)
-            router.push({ name:'dashboard' })
+            axios.get("/api/preload").then(response => {
+                this.loadPermission(response.data.permissions)
+                router.push({ name:'dashboard' })
+            }).catch(error => {
+                alert(error.response.data.message)
+            })
         }
     }
 </script>

@@ -23,15 +23,9 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'username' => 'admin',
-            'password' => '$2y$10$U6IWQbHl9TawEY6SW/u7Jup69lR.bCiTEctx1rNgfFZ74p8PFq4yq' //admin
-            /*
-            'name' => $this->faker->name,
-            'email' => $this->faker->unique()->safeEmail,
-            'email_verified_at' => now(),
+            'username' => $this->faker->unique()->userName,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => Str::random(10),
-            */
+            'deleted_at' => $this->faker->numberBetween(0, 5) ? null : $this->faker->dateTimeThisYear
         ];
     }
 }

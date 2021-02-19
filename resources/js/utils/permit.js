@@ -1,5 +1,7 @@
 import store from '@/store'
 
 export default function permit(rule) {
-	return store.getters['user/permissions'].includes(rule)
+	if(store.getters['user/isSuperAdmin']) return true
+
+	return store.getters['user/checkPermission'](rule) ? true : false
 }

@@ -7,7 +7,8 @@ export default {
 		commit('purge')
 
 	},
-	preload: ({commit}, payload) => {
-		commit('setReady', payload)
+	loadPermission: ({commit}, payload) => {
+		commit('setPermissions', payload)
+		commit('setReady', true)
 	}
 }
