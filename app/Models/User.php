@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Role;
 use App\Models\Permission;
 use \Carbon\Carbon;
@@ -28,6 +29,11 @@ class User extends Authenticatable
     public function getCreatedAtAttribute($value)
     {
         return Carbon::parse($value)->isoFormat('MMMM Do YYYY, HH:mm');
+    }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = Hash::needsRehash($value) ? Hash::make($value) : $value;
     }
 
     public function roles()
