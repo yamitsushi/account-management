@@ -16,9 +16,6 @@
 			<div class="card-body">
 				<div class="table-responsive">
 					<vue-good-table :columns="columns" :rows="this.users" :search-options="{enabled: true}">
-						<template slot="emptystate">
-							Please Wait
-						</template>
 						<template slot="table-row" slot-scope="props" >
 							<span v-if="props.column.field == 'status'">
 								{{ props.row.deleted_at ? 'Deactivated' : 'Active' }}

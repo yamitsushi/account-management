@@ -2,6 +2,7 @@
 	<router-view/>
 </template>
 <script>
+	import permit from '@/utils/permit'
 	import { mapGetters, mapActions } from 'vuex'
 
 	export default {
@@ -20,7 +21,7 @@
 				])
 		},
 		mounted() {
-			if (!this.usersLoaded) {
+			if (!this.usersLoaded && permit('USER')) {
 				axios.get("/api/account/user").then(response => {
 					this.loadUsers(response.data)
 				}).catch(error => {
@@ -28,7 +29,7 @@
 				})
 			}
 
-			if (!this.rolesLoaded) {
+			if (!this.rolesLoaded && permit('ROLE')) {
 				axios.get("/api/account/role").then(response => {
 					this.loadRoles(response.data)
 				}).catch(error => {
@@ -36,7 +37,7 @@
 				})
 			}
 
-			if (!this.permissionsLoaded) {
+			if (!this.permissionsLoaded && permit('PERMISSION')) {
 				axios.get("/api/account/permission").then(response => {
 					this.loadPermissions(response.data)
 				}).catch(error => {

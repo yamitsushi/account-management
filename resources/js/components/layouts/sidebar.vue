@@ -16,7 +16,7 @@
         <div class="sidebar-heading">
             Interface
         </div>
-        <li class="nav-item" v-bind:class="isActive('account')">
+        <li class="nav-item" v-bind:class="isActive('account')" v-if="can(['USER', 'ROLE'])">
             <a class="nav-link" v-b-toggle href="#collapseTwo" @click.prevent>
                 <i class="fas fa-hotel"></i>
                 <span>Account</span>
@@ -28,11 +28,11 @@
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span>
                     </router-link>
-                    <router-link class="collapse-item" :to="{ name : 'account.user'}" exact-path>
+                    <router-link class="collapse-item" :to="{ name : 'account.user'}" v-if="can('USER')" exact-path>
                         <i class="fas fa-fw fa-users"></i>
                         <span>User Controller</span>
                     </router-link>
-                    <router-link class="collapse-item" :to="{ name : 'account.role'}" exact-path>
+                    <router-link class="collapse-item" :to="{ name : 'account.role'}" v-if="can('ROLE')" exact-path>
                         <i class="fas fa-fw fa-user-tag"></i>
                         <span>Role Controller</span>
                     </router-link>
@@ -46,9 +46,11 @@
     </ul>
 </template>
 <script>
+    import permit from '@/utils/permit'
+
     export default {
         props: [
-            'isHidden'
+        'isHidden'
         ],
         methods: {
             toggleSidebar (event) {
@@ -59,6 +61,9 @@
             },
             isActive(name) {
                 return this.$route.name.split('.')[0].includes(name) ? "active" : ""
+            },
+            can (roles) {
+                return permit(roles)
             }
         }
     }

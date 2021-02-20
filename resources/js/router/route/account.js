@@ -15,18 +15,27 @@ export default {
 		path: '/',
 		name: 'account.dashboard',
 		component: Dashboard,
-		meta: { middleware: [auth, ready] }
+		meta: {
+			middleware: [auth, ready],
+			permit: ['USER', 'ROLE']
+		}
 	},
 	{
 		path: 'user',
 		name: 'account.user',
 		component: User,
-		meta: { middleware: [auth, ready] }
+		meta: {
+			middleware: [auth, ready],
+			permit: ['USER']
+		}
 	},
 	{
 		path: 'role',
 		name: 'account.role',
 		component: Role,
-		meta: { middleware: [auth, ready] }
+		meta: {
+			middleware: [auth, ready],
+			permit: ['ROLE']
+		}
 	}]
 }

@@ -19,7 +19,7 @@ class Permission extends Model
 
 	public function getActionAttribute($value)
 	{
-		return explode(".", strtoupper($value));
+		return strtoupper($value);
 	}
 
 	public function roles()

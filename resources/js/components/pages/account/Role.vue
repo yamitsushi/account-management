@@ -18,8 +18,8 @@
 					<vue-good-table :columns="columns" :rows="this.roles" :search-options="{enabled: true}">
 						<template slot="table-row" slot-scope="props" >
 							<b-row v-if="props.column.field == 'permissions'">
-								<b-col v-for="permission in props.row.permissions" :key="permission.action.join('.')">
-									<b-badge variant="primary">{{ permission.action.join(" ") }}</b-badge>
+								<b-col v-for="permission in props.row.permissions" :key="permission.action">
+									<b-badge variant="primary">{{ permission.action.replace('.', ' ') }}</b-badge>
 								</b-col>
 							</b-row>
 							<span v-else-if="props.column.field == 'action'">
@@ -46,12 +46,12 @@
 					<label>Allowed Permissions</label>
 					<b-form-input list="add-permission-list" v-model="addForm['temp-permission']" v-on:keyup.enter="addPermissionForm"/>
 					<datalist id="add-permission-list">
-						<option v-for="permission in permissions">{{ permission.action.join(' ') }}</option>
+						<option v-for="permission in permissions">{{ permission.replace('.', ' ') }}</option>
 					</datalist>
 					<b-row>
-						<b-col v-for="(item, index) in addForm['permissions']" :key="item.action.join('.')">
+						<b-col v-for="(item, index) in addForm['permissions']" :key="item">
 							<span class="badge badge-pill badge-success" @click="addPermissionRemoveForm(index)">
-							{{ item.action.join(" ") }}
+							{{ item.replace('.', ' ') }}
 						</span>
 						</b-col>
 					</b-row>
@@ -78,12 +78,12 @@
 					<label>Allowed Permissions</label>
 					<b-form-input list="update-permission-list" v-model="updateForm['temp-permission']" v-on:keyup.enter="updatePermissionForm"/>
 					<datalist id="update-permission-list">
-						<option v-for="permission in permissions">{{ permission.action.join(' ') }}</option>
+						<option v-for="permission in permissions">{{ permission.replace('.', ' ') }}</option>
 					</datalist>
 					<b-row>
-						<b-col v-for="(item, index) in updateForm['permissions']" :key="item.action.join('.')">
+						<b-col v-for="(item, index) in updateForm['permissions']" :key="item">
 							<span class="badge badge-pill badge-success" @click="updatePermissionRemoveForm(index)">
-							{{ item.action.join(" ") }}
+							{{ item.replace('.', ' ') }}
 						</span>
 						</b-col>
 					</b-row>
@@ -175,8 +175,8 @@
 				]),
 
 			addPermissionForm() {
-				if (!this.addForm['permissions'].includes(this.addForm['temp-permission'])) {
-					this.addForm['permissions'].push( { action : this.addForm['temp-permission'].split(' ') } )
+				if (!this.addForm['permissions'].includes(this.addForm['temp-permission'].replace(' ', '.'))) {
+					this.addForm['permissions'].push(this.addForm['temp-permission'].replace(' ', '.'))
 				}
 				this.addForm['temp-permission'] = null
 			},
@@ -198,13 +198,13 @@
 				this.updateForm['name'] = row.name
 				this.updateForm['permissions'] = []
 				row.permissions.forEach((value, index) => {
-					this.updateForm['permissions'].push( { action : value.action } )
+					this.updateForm['permissions'].push( value.action )
 				})
 				this.$bvModal.show('update')
 			},
 			updatePermissionForm() {
-				if (!this.updateForm['permissions'].includes(this.updateForm['temp-permission'])) {
-					this.updateForm['permissions'].push( { action : this.updateForm['temp-permission'].split(' ') } )
+				if (!this.updateForm['permissions'].includes(this.updateForm['temp-permission'].replace(' ', '.'))) {
+					this.updateForm['permissions'].push( this.updateForm['temp-permission'].replace(' ', '.') )
 				}
 				this.updateForm['temp-permission'] = null
 			},

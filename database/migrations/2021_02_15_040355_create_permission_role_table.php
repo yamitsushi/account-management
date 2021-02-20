@@ -27,6 +27,13 @@ class CreatePermissionRoleTable extends Migration
             'role_id' => 1,
             'permission_id' => 1
         ]);
+
+        // Role Permission Management
+        DB::table('permissions')->insert([
+            ['action' => 'PERMISSION_ROLE.CREATE'],
+            ['action' => 'PERMISSION_ROLE.READ'],
+            ['action' => 'PERMISSION_ROLE.DELETE'],
+        ]);
     }
 
     /**
@@ -37,5 +44,10 @@ class CreatePermissionRoleTable extends Migration
     public function down()
     {
         Schema::dropIfExists('permission_role');
+        DB::table('permissions')->whereIn('action', [
+            'PERMISSION_ROLE.CREATE',
+            'PERMISSION_ROLE.READ',
+            'PERMISSION_ROLE.DELETE'
+        ])->delete();
     }
 }

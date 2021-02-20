@@ -26,10 +26,10 @@ class PostRoleRequest extends FormRequest
     {
         return [
             'name' => 'required|unique:App\Models\Role',
-            'permissions.*.action' => ['array',
+            'permissions.*' => [
                 function($attribute, $value, $fail)
                 {
-                    if(Permission::where('action', strtolower(implode('.', $value)))->get()->isEmpty())
+                    if(Permission::where('action', $value)->get()->isEmpty())
                         $fail('Permission is not valid.');
                 }
             ]

@@ -20,24 +20,27 @@ class CreatePermissionsTable extends Migration
 
         // Default Administrator
         DB::table('permissions')->insert([
-            ['action' => 'super_administrator'],
+            ['action' => 'SUPER_ADMINISTRATOR'],
 
             // User Management
-            ['action' => 'user.create'],
-            ['action' => 'user.read'],
-            ['action' => 'user.update'],
-            ['action' => 'user.delete'],
+            ['action' => 'USER.CREATE'],
+            ['action' => 'USER.READ'],
+            ['action' => 'USER.UPDATE'],
+            ['action' => 'USER.DELETE'],
 
             // Role Management
-            ['action' => 'role.create'],
-            ['action' => 'role.read'],
-            ['action' => 'role.update'],
-            ['action' => 'role.delete'],
+            ['action' => 'ROLE.CREATE'],
+            ['action' => 'ROLE.READ'],
+            ['action' => 'ROLE.UPDATE'],
+            ['action' => 'ROLE.DELETE'],
+
+            // Permission Access
+            ['action' => 'PERMISSION.READ'],
 
             // UserRole Management
-            ['action' => 'role_user.create'],
-            ['action' => 'role_user.read'],
-            ['action' => 'role_user.delete']
+            ['action' => 'ROLE_USER.CREATE'],
+            ['action' => 'ROLE_USER.READ'],
+            ['action' => 'ROLE_USER.DELETE'],
 
         ]);
     }

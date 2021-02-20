@@ -27,21 +27,21 @@ class AccountController extends Controller
 
     public function getPermission()
     {
-    	return response()->json(Permission::allPermissions()->select('action')->get());
+    	return response()->json(Permission::allPermissions()->get()->pluck('action'));
     }
 
     public function postRole(PostRoleRequest $request)
     {
         $role = Role::firstOrCreate(['name' => $request->name]);
         $role->permissions()->sync($this->getPermissionsID($request->permissions));
-        return response()->json(Role::with('permissions')->find($role->id));
+        return response()->json(Role::with('permissions:action')->find($role->id));
     }
 
     public function patchRole(PatchRoleRequest $request, Role $role)
     {
         $role->update(['name' => $request->name]);
         $role->permissions()->sync($this->getPermissionsID($request->permissions));
-        return response()->json(Role::with('permissions')->find($role->id));
+        return response()->json(Role::with('permissions:action')->find($role->id));
     }
 
     public function deleteRole(DeleteRoleRequest $request, Role $role)
@@ -90,7 +90,7 @@ class AccountController extends Controller
         $final = [];
         foreach ($permissions as $permission)
         {
-            $id = Permission::where('action', strtolower(implode('.', $permission['action'])))->first()->id;
+            $id = Permission::where('action', $permission)->first()->id;
             if($id != 1)
                 array_push($final, $id);
         }

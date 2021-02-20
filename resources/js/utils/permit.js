@@ -1,7 +1,17 @@
 import store from '@/store'
 
-export default function permit(rule) {
-	if(store.getters['user/isSuperAdmin']) return true
+export default function permit(rules, method = null) {
+	if(store.getters['user/isSuperAdmin'])
+		return true
+	
+	var checks = Array.isArray(rules) ? rules : [rules]
 
-	return store.getters['user/checkPermission'](rule) ? true : false
+	var checking = false
+	checks.forEach(current => {
+		if(method)
+			checking = store.getters['user/checkAction'](current, method) ? true : checking
+		else
+			checking = store.getters['user/checkPermission'](current) ? true : checking
+	})
+	return checking
 }
