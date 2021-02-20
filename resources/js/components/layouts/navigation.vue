@@ -7,11 +7,11 @@
 	        <li class="nav-item dropdown no-arrow mx-1">
 	            <a class="nav-link" id="alertsDropdown" v-on:click="showDropdown('alert')">
 	                <i class="fas fa-bell fa-fw"></i>
-	                <span class="badge badge-danger badge-counter" v-if="alerts.length">{{ alerts.length > 1 ?  alerts.length + "+" : alerts.length }}</span>
+	                <span class="badge badge-danger badge-counter" v-if="alertCount">{{ alertCount }}</span>
 	            </a>
 	            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" v-bind:class="toggleAlert()">
 	                <h6 class="dropdown-header">
-	                    Real Time Alert
+	                    System Alert
 	                </h6>
 	                <a class="dropdown-item d-flex align-items-center" v-for="alert in alerts">
 	                    <div class="mr-3">
@@ -56,13 +56,12 @@
 		data() {
 			return {
 				alerts : [
-				/*
 					{
-						'date' : "December 12, 2019",
-						'message': "A new monthly report is ready to download!"
+						'date' : "January 01, 1997",
+						'message': "Birthday of Russel Dave Cruz"
 					}
-				*/
 				],
+				alertCount: 1,
 				dropdown : ""
 			}
 		},
@@ -84,6 +83,11 @@
 			showDropdown(value) {
 				if(this.dropdown == value) this.dropdown = ""
 				else this.dropdown = value
+			}
+		},
+		watch: {
+			dropdown: function (val, old) {
+				this.alertCount = (old == "alert") ? 0 : this.alertCount
 			}
 		}
 	}
