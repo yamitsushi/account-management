@@ -33,32 +33,14 @@ class AccountController extends Controller
     public function postRole(PostRoleRequest $request)
     {
         $role = Role::firstOrCreate(['name' => $request->name]);
-        $permissions = [];
-        foreach ($request->permissions as $permission) {
-            array_push(
-                $permissions,
-                Permission::where('action', 
-                    strtolower(
-                        implode('.', $permission['action'])
-                    )
-                )->first()->id
-            );
-        }
-        $role->permissions()->sync($permissions);
+        $role->permissions()->sync($this->getPermissionsID($request->permissions));
         return response()->json(Role::with('permissions')->find($role->id));
     }
 
     public function patchRole(PatchRoleRequest $request, Role $role)
     {
-        $role = Role::firstOrCreate(['name' => $request->name]);
-        $permissions = [];
-        foreach ($request->permissions as $permission) {
-            array_push(
-                $permissions,
-                Permission::where('action', str_replace(" ", ".", strtolower($permission)))->first()->id
-            );
-        }
-        $role->permissions()->sync($permissions);
+        $role->update(['name' => $request->name]);
+        $role->permissions()->sync($this->getPermissionsID($request->permissions));
         return response()->json(Role::with('permissions')->find($role->id));
     }
 
@@ -70,44 +52,48 @@ class AccountController extends Controller
     public function postUser(PostUserRequest $request)
     {
         $user = User::firstOrCreate($request->only(['username', 'password']));
-        $roles = [];
-        foreach ($request->roles as $role) {
-            array_push(
-                $roles,
-                Role::where('name',
-                    $role
-                )->first()->id
-            );
-        }
-        $user->roles()->sync($roles);
+        $user->roles()->sync($this->getRolesID($request->roles));
         return response()->json(User::with('roles:name')->find($user->id));
     }
 
     public function patchUser(PatchUserRequest $request, $id)
     {
         $user = User::withTrashed()->find($id);
-        if ($request->deactivate)
+        if($request->deactivate)
         {
             $user->update($request->only(['username']));
+            $user->roles()->detach();
             $user->delete();
         } else
         {
             $user->restore();
-            if ($request->password)
-                $user->update($request->only(['username', 'password']));
-            else
-                $user->update($request->only(['username']));
-            $roles = [];
-            foreach ($request->roles as $role) {
-                array_push(
-                    $roles,
-                    Role::where('name',
-                        $role
-                    )->first()->id
-                );
-            }
-            $user->roles()->sync($roles);
+            $user->update($request->only(['username', 'password']));
+            $user->roles()->sync($this->getRolesID($request->roles));
         }
         return response()->json(User::with('roles:name')->withTrashed()->find($id));
+    }
+
+    private function getRolesID($roles)
+    {
+        $final = [];
+        foreach ($roles as $role)
+        {
+            $id = Role::where('name', $role)->first()->id;
+            if($id != 1)
+                array_push($final, $id);
+        }
+        return $final;
+    }
+
+    private function getPermissionsID($permissions)
+    {
+        $final = [];
+        foreach ($permissions as $permission)
+        {
+            $id = Permission::where('action', strtolower(implode('.', $permission['action'])))->first()->id;
+            if($id != 1)
+                array_push($final, $id);
+        }
+        return $final;
     }
 }

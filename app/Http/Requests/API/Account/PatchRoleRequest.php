@@ -26,10 +26,10 @@ class PatchRoleRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'permissions.*' => [
+            'permissions.*.action' => [ 'array',
                 function($attribute, $value, $fail)
                 {
-                    if(Permission::where('action', strtolower(str_replace(" ", ".", $value)))->get()->isEmpty())
+                    if(Permission::where('action', strtolower(implode('.', $value)))->get()->isEmpty())
                         $fail('Permission is not valid.');
                 }
             ]

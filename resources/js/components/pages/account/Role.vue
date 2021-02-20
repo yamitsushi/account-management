@@ -16,9 +16,6 @@
 			<div class="card-body">
 				<div class="table-responsive">
 					<vue-good-table :columns="columns" :rows="this.roles" :search-options="{enabled: true}">
-						<template slot="emptystate">
-							Please Wait
-						</template>
 						<template slot="table-row" slot-scope="props" >
 							<b-row v-if="props.column.field == 'permissions'">
 								<b-col v-for="permission in props.row.permissions" :key="permission.action.join('.')">
@@ -84,8 +81,10 @@
 						<option v-for="permission in permissions">{{ permission.action.join(' ') }}</option>
 					</datalist>
 					<b-row>
-						<b-col v-for="(item, index) in updateForm['permissions']" :key="item">
-							<span class="badge badge-pill badge-success" @click="updatePermissionRemoveForm(index)">{{ item }}</span>
+						<b-col v-for="(item, index) in updateForm['permissions']" :key="item.action.join('.')">
+							<span class="badge badge-pill badge-success" @click="updatePermissionRemoveForm(index)">
+							{{ item.action.join(" ") }}
+						</span>
 						</b-col>
 					</b-row>
 				</div>
@@ -199,13 +198,13 @@
 				this.updateForm['name'] = row.name
 				this.updateForm['permissions'] = []
 				row.permissions.forEach((value, index) => {
-					this.updateForm['permissions'].push(value.action.join(" "))
+					this.updateForm['permissions'].push( { action : value.action } )
 				})
 				this.$bvModal.show('update')
 			},
 			updatePermissionForm() {
 				if (!this.updateForm['permissions'].includes(this.updateForm['temp-permission'])) {
-					this.updateForm['permissions'].push( this.updateForm['temp-permission'] )
+					this.updateForm['permissions'].push( { action : this.updateForm['temp-permission'].split(' ') } )
 				}
 				this.updateForm['temp-permission'] = null
 			},

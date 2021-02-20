@@ -26,7 +26,7 @@ class PatchUserRequest extends FormRequest
         return [
             'username' => 'required',
             'deactivate' => 'required|boolean',
-            'password' => 'confirmed',
+            'password' => 'confirmed|nullable',
             'roles.*' => 'exists:App\Models\Role,name',
         ];
     }
