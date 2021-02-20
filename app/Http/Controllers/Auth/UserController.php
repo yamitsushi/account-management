@@ -51,6 +51,6 @@ class UserController extends Controller
 
 	public function changePassword(ChangePasswordRequest $request)
 	{
-        return Auth::user()->update(['password' => bcrypt($request->password)]);
+        return Auth::user()->update($request->only(['password']));
 	}
 }
