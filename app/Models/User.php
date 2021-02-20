@@ -45,4 +45,9 @@ class User extends Authenticatable
     {
         return $this->where('id', '!=', 1)->withTrashed();
     }
+
+    public function scopePluckCurrentPermissions($query)
+    {
+        return $this->with('roles.permissions')->first()->roles->pluck('permissions')->flatten()->unique('action')->flatten()->pluck('action');
+    }
 }
