@@ -17,7 +17,7 @@ export default {
 		component: Dashboard,
 		meta: {
 			middleware: [auth, ready],
-			permit: ['USER', 'ROLE']
+			permit: ['USER.READ', 'ROLE.READ']
 		}
 	},
 	{
@@ -26,7 +26,7 @@ export default {
 		component: User,
 		meta: {
 			middleware: [auth, ready],
-			permit: ['USER']
+			permit: ['USER.READ']
 		}
 	},
 	{
@@ -35,7 +35,7 @@ export default {
 		component: Role,
 		meta: {
 			middleware: [auth, ready],
-			permit: ['ROLE']
+			permit: ['ROLE.READ']
 		}
 	}]
 }

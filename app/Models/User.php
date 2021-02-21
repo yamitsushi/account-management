@@ -49,6 +49,6 @@ class User extends Authenticatable
 
     public function scopePluckCurrentPermissions($query)
     {
-        return $this->with('roles.permissions')->first()->roles->pluck('permissions')->flatten()->unique('action')->flatten()->pluck('action');
+        return $this->load('roles.permissions:action')->roles->pluck('permissions')->flatten()->pluck('action')->unique();
     }
 }

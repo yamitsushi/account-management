@@ -31,17 +31,13 @@ class CreatePermissionsTable extends Migration
             // Role Management
             ['action' => 'ROLE.CREATE'],
             ['action' => 'ROLE.READ'],
-            ['action' => 'ROLE.UPDATE'],
             ['action' => 'ROLE.DELETE'],
 
             // Permission Access
             ['action' => 'PERMISSION.READ'],
 
             // UserRole Management
-            ['action' => 'ROLE_USER.CREATE'],
-            ['action' => 'ROLE_USER.READ'],
-            ['action' => 'ROLE_USER.DELETE'],
-
+            ['action' => 'ROLE_USER.PROVIDE']
         ]);
     }
 

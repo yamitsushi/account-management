@@ -24,16 +24,18 @@ class RolePolicy
 
     public function create(User $user)
     {
-        //
-    }
-
-    public function update(User $user, Role $role)
-    {
-        //
+        return $user->pluckCurrentPermissions()->contains('ROLE.CREATE') ? true : false;
     }
 
     public function delete(User $user, Role $role)
     {
-        //
+        if ($role->id === 1) return false;
+        return $user->pluckCurrentPermissions()->contains('ROLE.DELETE') ? true : false;
+    }
+
+    public function provideRole(User $user, Role $role)
+    {
+        if ($role->id === 1) return false;
+        return $user->pluckCurrentPermissions()->contains('ROLE_USER.PROVIDE') ? true : false;
     }
 }

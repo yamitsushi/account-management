@@ -30,9 +30,7 @@ class CreatePermissionRoleTable extends Migration
 
         // Role Permission Management
         DB::table('permissions')->insert([
-            ['action' => 'PERMISSION_ROLE.CREATE'],
-            ['action' => 'PERMISSION_ROLE.READ'],
-            ['action' => 'PERMISSION_ROLE.DELETE'],
+            ['action' => 'PERMISSION_ROLE.PROVIDE']
         ]);
     }
 

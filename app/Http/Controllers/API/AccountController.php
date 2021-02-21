@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\API\Account\PostUserRequest;
 use App\Http\Requests\API\Account\PatchUserRequest;
 use App\Http\Requests\API\Account\PostRoleRequest;
@@ -33,14 +34,15 @@ class AccountController extends Controller
     public function postRole(PostRoleRequest $request)
     {
         $role = Role::firstOrCreate(['name' => $request->name]);
-        $role->permissions()->sync($this->getPermissionsID($request->permissions));
+        if($request->user()->can('provideRole', $role))
+            $role->permissions()->sync($this->getPermissionsID($request->permissions));
         return response()->json(Role::with('permissions:action')->find($role->id));
     }
 
     public function patchRole(PatchRoleRequest $request, Role $role)
     {
-        $role->update(['name' => $request->name]);
-        $role->permissions()->sync($this->getPermissionsID($request->permissions));
+        if($request->user()->can('provideRole', $role))
+            $role->permissions()->sync($this->getPermissionsID($request->permissions));
         return response()->json(Role::with('permissions:action')->find($role->id));
     }
 
@@ -79,8 +81,7 @@ class AccountController extends Controller
         foreach ($roles as $role)
         {
             $id = Role::where('name', $role)->first()->id;
-            if($id != 1)
-                array_push($final, $id);
+            if($id != 1) array_push($final, $id);
         }
         return $final;
     }
@@ -91,8 +92,7 @@ class AccountController extends Controller
         foreach ($permissions as $permission)
         {
             $id = Permission::where('action', $permission)->first()->id;
-            if($id != 1)
-                array_push($final, $id);
+            if($id != 1) array_push($final, $id);
         }
         return $final;
     }

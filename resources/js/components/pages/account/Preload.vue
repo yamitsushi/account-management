@@ -21,7 +21,7 @@
 				])
 		},
 		mounted() {
-			if (!this.usersLoaded && permit('USER')) {
+			if (!this.usersLoaded && permit('USER.READ')) {
 				axios.get("/api/account/user").then(response => {
 					this.loadUsers(response.data)
 				}).catch(error => {
@@ -29,7 +29,7 @@
 				})
 			}
 
-			if (!this.rolesLoaded && permit('ROLE')) {
+			if (!this.rolesLoaded && permit('ROLE.READ')) {
 				axios.get("/api/account/role").then(response => {
 					this.loadRoles(response.data)
 				}).catch(error => {
@@ -37,7 +37,7 @@
 				})
 			}
 
-			if (!this.permissionsLoaded && permit('PERMISSION')) {
+			if (!this.permissionsLoaded && permit('PERMISSION.READ')) {
 				axios.get("/api/account/permission").then(response => {
 					this.loadPermissions(response.data)
 				}).catch(error => {

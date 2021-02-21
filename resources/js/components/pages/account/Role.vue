@@ -8,7 +8,7 @@
 			<div class="card-header d-sm-flex align-items-center justify-content-between py-3">
 				<h6 class="m-0 font-weight-bold text-primary">Roles Table</h6>
 
-				<a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm" v-b-modal.add>
+				<a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm" v-if="can('ROLE.CREATE')" v-b-modal.add>
 					<i class="fas fa-plus-circle"></i>
 					Add Role
 				</a>
@@ -24,8 +24,8 @@
 							</b-row>
 							<span v-else-if="props.column.field == 'action'">
 								<b-button-group size="md">
-									<b-button variant="info" @click="showUpdateForm(props.row)">Edit</b-button>
-									<b-button variant="warning" @click="showDeleteForm(props.row)">Delete</b-button>
+									<b-button variant="info" @click="showUpdateForm(props.row)" v-if="can('PERMISSION_ROLE.PROVIDE')">Edit</b-button>
+									<b-button variant="warning" @click="showDeleteForm(props.row)" v-if="can('ROLE.DELETE')">Delete</b-button>
 								</b-button-group>
 							</span>
 							<span v-else>
@@ -37,12 +37,12 @@
 			</div>
 		</div>
 
-		<b-modal id="add" title="Add New Role">
+		<b-modal id="add" title="Add New Role" v-if="can('ROLE.CREATE')">
 			<template #default>
 				<div class="form-group">
 					<input type="string" class="form-control form-control-user" v-model="addForm['name']" placeholder="Role Name">
 				</div>
-				<div class="form-group">
+				<div class="form-group" v-if="can('ROLE_USER.PROVIDE')">
 					<label>Allowed Permissions</label>
 					<b-form-input list="add-permission-list" v-model="addForm['temp-permission']" v-on:keyup.enter="addPermissionForm"/>
 					<datalist id="add-permission-list">
@@ -68,13 +68,13 @@
 			</template>
 		</b-modal>
 
-		<b-modal id="update" title="Update Role">
+		<b-modal id="update" title="Update Role" v-if="can('PERMISSION_ROLE.PROVIDE')">
 			<template #default>
 				<div class="form-group">
 					<label>Role Name</label>
 					<input type="string" class="form-control form-control-user" v-model="updateForm['name']" placeholder="Role Name" disabled>
 				</div>
-				<div class="form-group">
+				<div class="form-group" v-if="can('ROLE_USER.PROVIDE')">
 					<label>Allowed Permissions</label>
 					<b-form-input list="update-permission-list" v-model="updateForm['temp-permission']" v-on:keyup.enter="updatePermissionForm"/>
 					<datalist id="update-permission-list">
@@ -83,6 +83,16 @@
 					<b-row>
 						<b-col v-for="(item, index) in updateForm['permissions']" :key="item">
 							<span class="badge badge-pill badge-success" @click="updatePermissionRemoveForm(index)">
+							{{ item.replace('.', ' ') }}
+						</span>
+						</b-col>
+					</b-row>
+				</div>
+				<div class="form-group" v-else>
+					<label>Allowed Permissions</label>
+					<b-row>
+						<b-col v-for="(item, index) in updateForm['permissions']" :key="item">
+							<span class="badge badge-pill badge-success">
 							{{ item.replace('.', ' ') }}
 						</span>
 						</b-col>
@@ -100,7 +110,7 @@
 			</template>
 		</b-modal>
 
-		<b-modal id="delete" title="Delete Role">
+		<b-modal id="delete" title="Delete Role" v-if="can('ROLE.DELETE')">
 			<template #default>
 				<div class="form-group">
 					<label>Role Name</label>
@@ -121,6 +131,7 @@
 	</div>
 </template>
 <script>
+	import permit from "@/utils/permit"
 	import { mapGetters, mapActions } from 'vuex'
 	import { VueGoodTable } from 'vue-good-table'
 
@@ -168,6 +179,9 @@
 			};
 		},
 		methods: {
+            can (roles) {
+                return permit(roles)
+            },
 			...mapActions('account', [
 				'addRole',
 				'updateRole',

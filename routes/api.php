@@ -34,9 +34,9 @@ Route::middleware('auth:sanctum')->group(function () {
 		});
 		Route::prefix('role')->middleware('can:viewAny,App\Models\Role')->group(function () {
 			Route::get('/', [API\AccountController::class, 'getRole']);
-			Route::post('/', [API\AccountController::class, 'postRole']);
-			Route::patch('{role}', [API\AccountController::class, 'patchRole']);
-			Route::delete('{role}', [API\AccountController::class, 'deleteRole']);
+			Route::post('/', [API\AccountController::class, 'postRole'])->middleware('can:create,App\Models\Role');
+			Route::patch('{role}', [API\AccountController::class, 'patchRole'])->middleware('can:provideRole,role');
+			Route::delete('{role}', [API\AccountController::class, 'deleteRole'])->middleware('can:delete,role');
 		});
 		Route::get('permission', [API\AccountController::class, 'getPermission'])->middleware('can:viewAny,App\Models\Permission');
 	});
