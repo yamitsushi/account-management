@@ -8,7 +8,7 @@
 			<div class="card-header d-sm-flex align-items-center justify-content-between py-3">
 				<h6 class="m-0 font-weight-bold text-primary">Users Table</h6>
 
-				<a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm" v-b-modal.add>
+				<a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm" v-if="can('USER.CREATE')" v-b-modal.add>
 					<i class="fas fa-plus-circle"></i>
 					Add User
 				</a>
@@ -32,7 +32,7 @@
 							</b-row>
 							<span v-else-if="props.column.field == 'action'">
 								<b-button-group size="md">
-									<b-button variant="info" @click="showUpdateForm(props.row)">Update</b-button>
+									<b-button variant="info" v-if="can('USER.UPDATE')" @click="showUpdateForm(props.row)">Update</b-button>
 								</b-button-group>
 							</span>
 							<span v-else>
@@ -44,12 +44,12 @@
 			</div>
 		</div>
 
-		<b-modal id="add" title="Add New User">
+		<b-modal id="add" title="Add New User" v-if="can('USER.CREATE')">
 			<template #default>
 				<div class="form-group">
 					<input type="string" class="form-control form-control-user" v-model="addForm['username']" placeholder="Username">
 				</div>
-				<div class="form-group">
+				<div class="form-group" v-if="can('ROLE_USER.PROVIDE')">
 					<label>Assigned Role</label>
 					<b-form-input list="add-role-list" v-model="addForm['temp-role']" v-on:keyup.enter="addRoleForm"></b-form-input>
 					<datalist id="add-role-list">
@@ -79,7 +79,7 @@
 			</template>
 		</b-modal>
 
-		<b-modal id="update" title="Update User">
+		<b-modal id="update" title="Update User" v-if="can('USER.UPDATE')">
 			<template #default>
 				<div class="form-group">
 					<label>Username</label>
@@ -90,16 +90,26 @@
 					<label>Deactivate</label>
 				</div>
 				<div class="form-group" v-if="!updateForm['deactivate']">
-					<label>Assigned Role</label>
-					<b-form-input list="update-role-list" v-model="updateForm['temp-role']" v-on:keyup.enter="updateRoleForm"></b-form-input>
-					<datalist id="update-role-list">
-						<option v-for="role in roles">{{ role.name }}</option>
-					</datalist>
-					<b-row>
-						<b-col v-for="(item, index) in updateForm['roles']" :key="item">
-							<span class="badge badge-pill badge-success" @click="updateRoleRemoveForm(index)">{{ item }}</span>
-						</b-col>
-					</b-row>
+					<template v-if="can('ROLE_USER.PROVIDEs')">
+						<label>Assigned Role</label>
+						<b-form-input list="update-role-list" v-model="updateForm['temp-role']" v-on:keyup.enter="updateRoleForm"></b-form-input>
+						<datalist id="update-role-list">
+							<option v-for="role in roles">{{ role.name }}</option>
+						</datalist>
+						<b-row>
+							<b-col v-for="(item, index) in updateForm['roles']" :key="item">
+								<span class="badge badge-pill badge-success" @click="updateRoleRemoveForm(index)">{{ item }}</span>
+							</b-col>
+						</b-row>
+					</template>
+					<template v-else>
+						<label>Assigned Role</label>
+						<b-row>
+							<b-col v-for="(item, index) in updateForm['roles']" :key="item">
+								<span class="badge badge-pill badge-success">{{ item }}</span>
+							</b-col>
+						</b-row>
+					</template>
 				</div>
 				<div class="form-group" v-if="!updateForm['deactivate']">
 					<input type="password" class="form-control" v-model="updateForm['password']" placeholder="New Password">
@@ -121,6 +131,7 @@
 	</div>
 </template>
 <script>
+	import permit from "@/utils/permit"
 	import { mapGetters, mapActions } from 'vuex'
 	import { VueGoodTable } from 'vue-good-table'
 
@@ -186,6 +197,9 @@
 				'updateUser',
 				'deleteUser'
 				]),
+			can (roles) {
+				return permit(roles)
+			},
 
 			addRoleForm() {
 				if (!this.addForm['roles'].includes(this.addForm['temp-role'])) {
