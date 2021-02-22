@@ -33,9 +33,9 @@ class RolePolicy
         return $user->pluckCurrentPermissions()->contains('ROLE.DELETE') ? true : false;
     }
 
-    public function provideRole(User $user, Role $role)
+    public function providePermission(User $user, Role $role)
     {
         if ($role->id === 1) return false;
-        return $user->pluckCurrentPermissions()->contains('ROLE_USER.PROVIDE') ? true : false;
+        return $user->pluckCurrentPermissions()->contains('PERMISSION_ROLE.PROVIDE') ? true : false;
     }
 }

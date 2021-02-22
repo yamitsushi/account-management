@@ -34,15 +34,14 @@ class AccountController extends Controller
     public function postRole(PostRoleRequest $request)
     {
         $role = Role::firstOrCreate(['name' => $request->name]);
-        if($request->user()->can('provideRole', $role))
+        if($request->user()->can('providePermission', $role))
             $role->permissions()->sync($this->getPermissionsID($request->permissions));
         return response()->json(Role::with('permissions:action')->find($role->id));
     }
 
     public function patchRole(PatchRoleRequest $request, Role $role)
     {
-        if($request->user()->can('provideRole', $role))
-            $role->permissions()->sync($this->getPermissionsID($request->permissions));
+        $role->permissions()->sync($this->getPermissionsID($request->permissions));
         return response()->json(Role::with('permissions:action')->find($role->id));
     }
 
@@ -54,23 +53,29 @@ class AccountController extends Controller
     public function postUser(PostUserRequest $request)
     {
         $user = User::firstOrCreate($request->only(['username', 'password']));
-        $user->roles()->sync($this->getRolesID($request->roles));
+        if($request->user()->can('provideRole', $user))
+            $user->roles()->sync($this->getRolesID($request->roles));
         return response()->json(User::with('roles:name')->find($user->id));
     }
 
     public function patchUser(PatchUserRequest $request, $id)
     {
         $user = User::withTrashed()->find($id);
+        if($request->user()->can('update', $user))
+            $user->update($request->only(['username', 'password']));
         if($request->deactivate)
         {
-            $user->update($request->only(['username']));
-            $user->roles()->detach();
-            $user->delete();
+            if($request->user()->can('delete', $user))
+            {
+                $user->roles()->detach();
+                $user->delete();
+            }
         } else
         {
-            $user->restore();
-            $user->update($request->only(['username', 'password']));
-            $user->roles()->sync($this->getRolesID($request->roles));
+            if($request->user()->can('restore', $user))
+                $user->restore();
+            if($request->user()->can('provideRole', $user) && !$user->deleted_at)
+                $user->roles()->sync($this->getRolesID($request->roles));
         }
         return response()->json(User::with('roles:name')->withTrashed()->find($id));
     }

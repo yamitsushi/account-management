@@ -26,7 +26,6 @@ class CreatePermissionsTable extends Migration
             ['action' => 'USER.CREATE'],
             ['action' => 'USER.READ'],
             ['action' => 'USER.UPDATE'],
-            ['action' => 'USER.DELETE'],
 
             // Role Management
             ['action' => 'ROLE.CREATE'],

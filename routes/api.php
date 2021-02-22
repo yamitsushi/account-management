@@ -29,13 +29,13 @@ Route::middleware('auth:sanctum')->group(function () {
 	Route::prefix('account')->group(function () {
 		Route::prefix('user')->middleware('can:viewAny,App\Models\User')->group(function () {
 			Route::get('/', [API\AccountController::class, 'getUser']);
-			Route::post('/', [API\AccountController::class, 'postUser']);
+			Route::post('/', [API\AccountController::class, 'postUser'])->middleware('can:create,App\Models\User');
 			Route::patch('{id}', [API\AccountController::class, 'patchUser']);
 		});
 		Route::prefix('role')->middleware('can:viewAny,App\Models\Role')->group(function () {
 			Route::get('/', [API\AccountController::class, 'getRole']);
 			Route::post('/', [API\AccountController::class, 'postRole'])->middleware('can:create,App\Models\Role');
-			Route::patch('{role}', [API\AccountController::class, 'patchRole'])->middleware('can:provideRole,role');
+			Route::patch('{role}', [API\AccountController::class, 'patchRole'])->middleware('can:providePermission,role');
 			Route::delete('{role}', [API\AccountController::class, 'deleteRole'])->middleware('can:delete,role');
 		});
 		Route::get('permission', [API\AccountController::class, 'getPermission'])->middleware('can:viewAny,App\Models\Permission');

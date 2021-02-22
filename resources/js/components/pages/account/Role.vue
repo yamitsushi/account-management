@@ -42,7 +42,7 @@
 				<div class="form-group">
 					<input type="string" class="form-control form-control-user" v-model="addForm['name']" placeholder="Role Name">
 				</div>
-				<div class="form-group" v-if="can('ROLE_USER.PROVIDE')">
+				<div class="form-group" v-if="can('PERMISSION_ROLE.PROVIDE')">
 					<label>Allowed Permissions</label>
 					<b-form-input list="add-permission-list" v-model="addForm['temp-permission']" v-on:keyup.enter="addPermissionForm"/>
 					<datalist id="add-permission-list">
@@ -74,7 +74,7 @@
 					<label>Role Name</label>
 					<input type="string" class="form-control form-control-user" v-model="updateForm['name']" placeholder="Role Name" disabled>
 				</div>
-				<div class="form-group" v-if="can('ROLE_USER.PROVIDE')">
+				<div class="form-group" v-if="can('PERMISSION_ROLE.PROVIDE')">
 					<label>Allowed Permissions</label>
 					<b-form-input list="update-permission-list" v-model="updateForm['temp-permission']" v-on:keyup.enter="updatePermissionForm"/>
 					<datalist id="update-permission-list">
