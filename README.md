@@ -1,62 +1,67 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+## Account Management
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This is a Simple Account Management System, complete with back and front-end Account Authorization.
 
-## About Laravel
+This are the following frameworks that uses to make this works
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- [Laravel 8](https://laravel.com/)
+- [Vue.js](https://vuejs.org/)
+- [Vuex](https://vuex.vuejs.org/)
+- [Vue Router](https://router.vuejs.org/)
+- [BootstrapVue](https://bootstrap-vue.org/)
+- [SB Admin 2](https://startbootstrap.com/theme/sb-admin-2)
+- [Vue Good Table](https://xaksis.github.io/vue-good-table/)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Guide Back-end
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+It is Preferred to use this style to make a Permission
 
-## Learning Laravel
+> *Table Name* . *Method*
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+note that it is much preferable to make it all caps.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+I use these method for reference
+- CREATE : create a record
+- READ : retrieve the records
+- UPDATE : update a record
+- DELETE : delete a record
+- PROVIDE : pivot specific method
 
-## Laravel Sponsors
+For Back end Authorization, Check [Laravel Authorization](https://laravel.com/docs/8.x/authorization).
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Guide Front-end
 
-### Premium Partners
+the Vue included will automatically checks the user and retrieve all available Permissions
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/)**
-- **[OP.GG](https://op.gg)**
+to check if the user is authorize just import the necessary utility
+> import permit from '@/utils/permit'
 
-## Contributing
+to check permission just use the function
+> permit('PERMISSION')
+or
+> permit(['PERMISSION1', 'PERMISSION2'])
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+the first will check if the user is authorized, while the latter will check if user is authorized in any of the given Permissions
 
-## Code of Conduct
+## Background
+I write this code as a past time during quarantine.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+I'm trying to find a simple account management and only found either back-end or front-end but not as a whole.  Hence I write this code with all my self learned knowledge, to make a simple authorization complete with an implementation of what I want and think of as necessary.
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+This may be a mash up code due to my own incompetence.  Even though, may this code help/provide guidance for all beginner programmer like myself.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This is licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Donation???
+As much as I want to ask for donation, my code just ends up as a hard to read code so I will refrain for asking any.
+
+Currently I am just a meanly IT Staff who only work with internet connection and code as a past time(not work).
+ 
+Though I am grateful to know if this code somehow or another helps other programmers
+
+Just feel free to contact me
+email: russel_cruz01@gmail.com
+contact: +639563782994
+facebook: https://www.facebook.com/russelcruz01
