@@ -62,6 +62,9 @@ Currently I am just a meanly IT Staff who only work with internet connection and
 Though I am grateful to know if this code somehow or another helps other programmers
 
 Just feel free to contact me
+
 email: russel_cruz01@gmail.com
+
 contact: +639563782994
+
 facebook: https://www.facebook.com/russelcruz01
